@@ -826,7 +826,97 @@
             }
         }
 
-        // Editar script
-        
-    </body>
- </html>
+        // Copiar código do modal
+        function copyToClipboard() {
+            if (currentScriptData && currentScriptData.content) {
+                navigator.clipboard.writeText(currentScriptData.content).then(() => {
+                    alert("Código copiado para a área de transferência!");
+                }).catch(() => {
+                    alert("Erro ao copiar código.");
+                });
+            }
+        }
+
+        // Abrir link RAW do script
+        function openRawUrl() {
+            if (currentScriptData && currentScriptData.rawUrl) {
+                window.open(currentScriptData.rawUrl, "_blank");
+            }
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById("codeModal").style.display = "none";
+            currentScriptData = null;
+        }
+
+        // Editar script (abre modal com conteúdo editável)
+        async function editScript(id) {
+            try {
+                const response = await fetch(`/view/${id}`);
+                const result = await response.json();
+                if (!result.success) throw new Error(result.message);
+
+                const script = result;
+                document.getElementById("usuario").value = script.usuario;
+                document.getElementById("filename").value = script.filename;
+                document.getElementById("description").value = script.description || "";
+                document.getElementById("conteudo").value = script.content;
+
+                showTab("create");
+                showStatus("createStatus", `Editando script: ${id}`, "info");
+                currentScriptData = { id, ...script };
+
+            } catch (error) {
+                alert("Erro ao carregar script para edição: " + error.message);
+            }
+        }
+
+        // Deletar script
+        async function deleteScript(id) {
+            if (!confirm("Tem certeza que deseja deletar este script?")) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/delete/${id}`, { method: "DELETE" });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert("Script deletado com sucesso!");
+                    loadMyScripts();
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                alert("Erro ao deletar script: " + error.message);
+            }
+        }
+
+        // Preview do código em nova janela
+        function previewCode() {
+            const code = document.getElementById("conteudo").value;
+            const previewWindow = window.open("", "_blank");
+            previewWindow.document.open();
+            previewWindow.document.write(code);
+            previewWindow.document.close();
+        }
+
+        // Limpar formulário
+        function clearForm() {
+            document.getElementById("createForm").reset();
+        }
+
+        // Mostrar mensagens de status
+        function showStatus(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            el.className = "status " + type;
+            el.textContent = message;
+            el.style.display = "block";
+        }
+
+        function hideStatus(elementId) {
+            const el = document.getElementById(elementId);
+            el.style.display = "none";
+        }
+    </script>
+</body>
+</html>
