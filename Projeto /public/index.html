@@ -1,30 +1,427 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Plataforma RAW</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Raw - Editor de Código</title>
+    <style>
+        /* Reset básico e configuração da fonte */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+          color: #e0e0e0;
+          text-align: center;
+          padding: 40px 20px;
+          min-height: 100vh;
+          line-height: 1.6;
+        }
+
+        /* Container principal */
+        .container {
+          max-width: 800px;
+          margin: 0 auto;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border-radius: 20px;
+          padding: 40px;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Título principal */
+        h1 {
+          color: #00ffff;
+          font-size: 2.5rem;
+          margin-bottom: 30px;
+          text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+          font-weight: 300;
+          letter-spacing: 2px;
+        }
+
+        /* Formulário */
+        form {
+          margin-top: 30px;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          align-items: center;
+        }
+
+        .form-group {
+          width: 100%;
+          max-width: 600px;
+        }
+
+        label {
+          display: block;
+          text-align: left;
+          margin-bottom: 8px;
+          color: #00ffff;
+          font-weight: 500;
+          font-size: 14px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        /* Textarea melhorado */
+        textarea {
+          width: 100%;
+          height: 200px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 2px solid rgba(0, 255, 255, 0.3);
+          border-radius: 15px;
+          padding: 20px;
+          color: #e0e0e0;
+          font-family: 'Courier New', monospace;
+          font-size: 14px;
+          resize: vertical;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(5px);
+        }
+
+        textarea:focus {
+          outline: none;
+          border-color: #00ffff;
+          box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        textarea::placeholder {
+          color: rgba(224, 224, 224, 0.5);
+        }
+
+        /* Inputs melhorados */
+        input[type="text"], input[type="url"], input[type="email"] {
+          background: rgba(255, 255, 255, 0.05);
+          border: 2px solid rgba(0, 255, 255, 0.3);
+          border-radius: 10px;
+          padding: 12px 20px;
+          color: #e0e0e0;
+          font-size: 16px;
+          width: 100%;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(5px);
+        }
+
+        input[type="text"]:focus, 
+        input[type="url"]:focus, 
+        input[type="email"]:focus {
+          outline: none;
+          border-color: #00ffff;
+          box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        input::placeholder {
+          color: rgba(224, 224, 224, 0.5);
+        }
+
+        /* Botões melhorados */
+        button {
+          background: linear-gradient(45deg, #00ffff, #0099cc);
+          border: none;
+          border-radius: 25px;
+          padding: 15px 30px;
+          color: #000;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+          margin: 10px;
+        }
+
+        button:hover {
+          background: linear-gradient(45deg, #00cccc, #0077aa);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 255, 255, 0.4);
+        }
+
+        button:active {
+          transform: translateY(0);
+        }
+
+        /* Botão secundário */
+        .secondary-btn {
+          background: linear-gradient(45deg, #333, #555);
+          color: #e0e0e0;
+        }
+
+        .secondary-btn:hover {
+          background: linear-gradient(45deg, #555, #777);
+          box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Área de resultado */
+        .result-area {
+          margin-top: 30px;
+          padding: 20px;
+          background: rgba(255, 255, 255, 0.02);
+          border-radius: 15px;
+          border: 1px solid rgba(0, 255, 255, 0.2);
+          text-align: left;
+          word-wrap: break-word;
+          font-family: 'Courier New', monospace;
+          font-size: 14px;
+          line-height: 1.5;
+          min-height: 100px;
+          display: none;
+        }
+
+        .result-area.active {
+          display: block;
+        }
+
+        /* Links */
+        a {
+          color: #00ffff;
+          text-decoration: none;
+          transition: color 0.3s ease;
+        }
+
+        a:hover {
+          color: #66ffff;
+          text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Botões de ação */
+        .button-group {
+          display: flex;
+          gap: 15px;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        /* Status indicator */
+        .status {
+          padding: 10px 20px;
+          border-radius: 10px;
+          margin: 15px 0;
+          font-weight: 500;
+          display: none;
+        }
+
+        .status.success {
+          background: rgba(0, 255, 0, 0.1);
+          border: 1px solid rgba(0, 255, 0, 0.3);
+          color: #00ff00;
+          display: block;
+        }
+
+        .status.error {
+          background: rgba(255, 0, 0, 0.1);
+          border: 1px solid rgba(255, 0, 0, 0.3);
+          color: #ff6666;
+          display: block;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+          body {
+            padding: 20px 10px;
+          }
+          
+          .container {
+            padding: 20px;
+          }
+          
+          h1 {
+            font-size: 2rem;
+          }
+          
+          textarea {
+            height: 150px;
+          }
+          
+          input[type="text"], input[type="url"], input[type="email"] {
+            font-size: 14px;
+          }
+          
+          button {
+            padding: 12px 25px;
+            font-size: 14px;
+          }
+
+          .button-group {
+            flex-direction: column;
+            align-items: center;
+          }
+        }
+
+        /* Animações suaves */
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .container {
+          animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(45deg, #00ffff, #0099cc);
+          border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(45deg, #00cccc, #0077aa);
+        }
+    </style>
 </head>
 <body>
-  <h1>Plataforma RAW</h1>
-  <form id="scriptForm">
-    <textarea name="conteudo" placeholder="Cole seu script aqui..."></textarea>
-    <input type="text" name="usuario" placeholder="Seu nome de usuário">
-    <button type="submit">Salvar Script</button>
-  </form>
-  <p id="link"></p>
-  <script>
-    document.getElementById("scriptForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const res = await fetch("/criar", {
-        method: "POST",
-        body: formData
-      });
-      const data = await res.json();
-      document.getElementById("link").innerHTML = 
-        `Seu link RAW: <a href="${data.url}" target="_blank">${data.url}</a>`;
-    });
-  </script>
+    <div class="container">
+        <h1>RAW PLATFORM</h1>
+        
+        <form id="rawForm">
+            <div class="form-group">
+                <label for="filename">Nome do Arquivo</label>
+                <input type="text" id="filename" name="filename" placeholder="exemplo.html">
+            </div>
+
+            <div class="form-group">
+                <label for="content">Conteúdo do Arquivo</label>
+                <textarea id="content" name="content" placeholder="Digite seu código aqui..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descrição (Opcional)</label>
+                <input type="text" id="description" name="description" placeholder="Descrição do arquivo">
+            </div>
+
+            <div class="button-group">
+                <button type="submit">Salvar Raw</button>
+                <button type="button" class="secondary-btn" onclick="clearForm()">Limpar</button>
+                <button type="button" class="secondary-btn" onclick="previewCode()">Visualizar</button>
+            </div>
+        </form>
+
+        <div id="status" class="status"></div>
+
+        <div id="resultArea" class="result-area">
+            <h3 style="color: #00ffff; margin-bottom: 15px;">Resultado:</h3>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Função para limpar formulário
+        function clearForm() {
+            document.getElementById('rawForm').reset();
+            hideResult();
+            hideStatus();
+        }
+
+        // Função para preview do código
+        function previewCode() {
+            const content = document.getElementById('content').value;
+            const filename = document.getElementById('filename').value;
+            
+            if (!content.trim()) {
+                showStatus('Por favor, insira algum conteúdo para visualizar.', 'error');
+                return;
+            }
+
+            const resultArea = document.getElementById('resultArea');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.innerHTML = `
+                <p><strong>Arquivo:</strong> ${filename || 'Sem nome'}</p>
+                <p><strong>Tamanho:</strong> ${content.length} caracteres</p>
+                <hr style="border: 1px solid rgba(0, 255, 255, 0.3); margin: 15px 0;">
+                <pre style="white-space: pre-wrap; word-wrap: break-word;">${escapeHtml(content)}</pre>
+            `;
+            
+            resultArea.classList.add('active');
+            showStatus('Preview gerado com sucesso!', 'success');
+        }
+
+        // Função para mostrar status
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        // Função para esconder status
+        function hideStatus() {
+            const status = document.getElementById('status');
+            status.className = 'status';
+        }
+
+        // Função para esconder resultado
+        function hideResult() {
+            document.getElementById('resultArea').classList.remove('active');
+        }
+
+        // Função para escapar HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, (m) => map[m]);
+        }
+
+        // Event listener para o formulário
+        document.getElementById('rawForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const filename = document.getElementById('filename').value;
+            const content = document.getElementById('content').value;
+            const description = document.getElementById('description').value;
+
+            if (!content.trim()) {
+                showStatus('Por favor, insira algum conteúdo.', 'error');
+                return;
+            }
+
+            // Simular salvamento (aqui você adicionaria a lógica real de salvamento)
+            setTimeout(() => {
+                showStatus(`Arquivo "${filename || 'Sem nome'}" salvo com sucesso!`, 'success');
+                
+                // Mostrar informações do arquivo salvo
+                const resultContent = document.getElementById('resultContent');
+                resultContent.innerHTML = `
+                    <p><strong>✓ Arquivo salvo:</strong> ${filename || 'Sem nome'}</p>
+                    <p><strong>Tamanho:</strong> ${content.length} caracteres</p>
+                    <p><strong>Descrição:</strong> ${description || 'Nenhuma'}</p>
+                    <p><strong>Data:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+                `;
+                document.getElementById('resultArea').classList.add('active');
+            }, 500);
+        });
+
+        // Auto-resize do textarea
+        document.getElementById('content').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(this.scrollHeight, 200) + 'px';
+        });
+    </script>
 </body>
 </html>
