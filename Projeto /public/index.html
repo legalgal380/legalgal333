@@ -3,425 +3,830 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma Raw - Editor de Código</title>
+    <title>Raw Platform - Editor de Código Online</title>
     <style>
-        /* Reset básico e configuração da fonte */
         * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-          color: #e0e0e0;
-          text-align: center;
-          padding: 40px 20px;
-          min-height: 100vh;
-          line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.6;
         }
 
-        /* Container principal */
         .container {
-          max-width: 800px;
-          margin: 0 auto;
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
-          border-radius: 20px;
-          padding: 40px;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        /* Título principal */
-        h1 {
-          color: #00ffff;
-          font-size: 2.5rem;
-          margin-bottom: 30px;
-          text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-          font-weight: 300;
-          letter-spacing: 2px;
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        /* Formulário */
-        form {
-          margin-top: 30px;
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-          align-items: center;
+        .header h1 {
+            color: #00ffff;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            font-weight: 300;
+            letter-spacing: 3px;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            color: #e0e0e0;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(45deg, #00ffff, #0099cc);
+            color: #000;
+            border-color: #00ffff;
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .tab-btn:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
         }
 
         .form-group {
-          width: 100%;
-          max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            min-width: 250px;
         }
 
         label {
-          display: block;
-          text-align: left;
-          margin-bottom: 8px;
-          color: #00ffff;
-          font-weight: 500;
-          font-size: 14px;
-          text-transform: uppercase;
-          letter-spacing: 1px;
+            display: block;
+            margin-bottom: 8px;
+            color: #00ffff;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Textarea melhorado */
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: #e0e0e0;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
         textarea {
-          width: 100%;
-          height: 200px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 2px solid rgba(0, 255, 255, 0.3);
-          border-radius: 15px;
-          padding: 20px;
-          color: #e0e0e0;
-          font-family: 'Courier New', monospace;
-          font-size: 14px;
-          resize: vertical;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(5px);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 200px;
         }
 
-        textarea:focus {
-          outline: none;
-          border-color: #00ffff;
-          box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-          background: rgba(255, 255, 255, 0.08);
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        textarea::placeholder {
-          color: rgba(224, 224, 224, 0.5);
+        input::placeholder, textarea::placeholder {
+            color: rgba(224, 224, 224, 0.5);
         }
 
-        /* Inputs melhorados */
-        input[type="text"], input[type="url"], input[type="email"] {
-          background: rgba(255, 255, 255, 0.05);
-          border: 2px solid rgba(0, 255, 255, 0.3);
-          border-radius: 10px;
-          padding: 12px 20px;
-          color: #e0e0e0;
-          font-size: 16px;
-          width: 100%;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(5px);
+        .btn {
+            background: linear-gradient(45deg, #00ffff, #0099cc);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            color: #000;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+            margin: 5px;
         }
 
-        input[type="text"]:focus, 
-        input[type="url"]:focus, 
-        input[type="email"]:focus {
-          outline: none;
-          border-color: #00ffff;
-          box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-          background: rgba(255, 255, 255, 0.08);
+        .btn:hover {
+            background: linear-gradient(45deg, #00cccc, #0077aa);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.4);
         }
 
-        input::placeholder {
-          color: rgba(224, 224, 224, 0.5);
+        .btn-secondary {
+            background: linear-gradient(45deg, #333, #555);
+            color: #e0e0e0;
         }
 
-        /* Botões melhorados */
-        button {
-          background: linear-gradient(45deg, #00ffff, #0099cc);
-          border: none;
-          border-radius: 25px;
-          padding: 15px 30px;
-          color: #000;
-          font-size: 16px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
-          margin: 10px;
+        .btn-secondary:hover {
+            background: linear-gradient(45deg, #555, #777);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
         }
 
-        button:hover {
-          background: linear-gradient(45deg, #00cccc, #0077aa);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0, 255, 255, 0.4);
+        .btn-danger {
+            background: linear-gradient(45deg, #ff4444, #cc2222);
+            color: #fff;
         }
 
-        button:active {
-          transform: translateY(0);
+        .btn-danger:hover {
+            background: linear-gradient(45deg, #cc2222, #aa1111);
         }
 
-        /* Botão secundário */
-        .secondary-btn {
-          background: linear-gradient(45deg, #333, #555);
-          color: #e0e0e0;
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
 
-        .secondary-btn:hover {
-          background: linear-gradient(45deg, #555, #777);
-          box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Área de resultado */
-        .result-area {
-          margin-top: 30px;
-          padding: 20px;
-          background: rgba(255, 255, 255, 0.02);
-          border-radius: 15px;
-          border: 1px solid rgba(0, 255, 255, 0.2);
-          text-align: left;
-          word-wrap: break-word;
-          font-family: 'Courier New', monospace;
-          font-size: 14px;
-          line-height: 1.5;
-          min-height: 100px;
-          display: none;
-        }
-
-        .result-area.active {
-          display: block;
-        }
-
-        /* Links */
-        a {
-          color: #00ffff;
-          text-decoration: none;
-          transition: color 0.3s ease;
-        }
-
-        a:hover {
-          color: #66ffff;
-          text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-
-        /* Botões de ação */
-        .button-group {
-          display: flex;
-          gap: 15px;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-
-        /* Status indicator */
         .status {
-          padding: 10px 20px;
-          border-radius: 10px;
-          margin: 15px 0;
-          font-weight: 500;
-          display: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
+            display: none;
         }
 
         .status.success {
-          background: rgba(0, 255, 0, 0.1);
-          border: 1px solid rgba(0, 255, 0, 0.3);
-          color: #00ff00;
-          display: block;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            color: #00ff00;
+            display: block;
         }
 
         .status.error {
-          background: rgba(255, 0, 0, 0.1);
-          border: 1px solid rgba(255, 0, 0, 0.3);
-          color: #ff6666;
-          display: block;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff6666;
+            display: block;
         }
 
-        /* Responsividade */
-        @media (max-width: 768px) {
-          body {
-            padding: 20px 10px;
-          }
-          
-          .container {
+        .status.info {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: #00ffff;
+            display: block;
+        }
+
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .script-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
             padding: 20px;
-          }
-          
-          h1 {
+            transition: all 0.3s ease;
+        }
+
+        .script-card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .script-title {
+            color: #00ffff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .script-meta {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .script-description {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .script-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .script-actions .btn {
+            font-size: 12px;
+            padding: 8px 15px;
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
             font-size: 2rem;
-          }
-          
-          textarea {
-            height: 150px;
-          }
-          
-          input[type="text"], input[type="url"], input[type="email"] {
+            font-weight: bold;
+            color: #00ffff;
+            display: block;
+        }
+
+        .stat-label {
             font-size: 14px;
-          }
-          
-          button {
-            padding: 12px 25px;
-            font-size: 14px;
-          }
-
-          .button-group {
-            flex-direction: column;
-            align-items: center;
-          }
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Animações suaves */
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        .loading {
+            text-align: center;
+            color: #888;
+            padding: 40px;
         }
 
-        .container {
-          animation: fadeIn 0.6s ease-out;
+        .spinner {
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 2px solid #00ffff;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
         }
 
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar {
-          width: 8px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        ::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.1);
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
         }
 
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(45deg, #00ffff, #0099cc);
-          border-radius: 4px;
+        .page-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(45deg, #00cccc, #0077aa);
+        .page-btn:hover, .page-btn.active {
+            background: #00ffff;
+            color: #000;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .close {
+            color: #888;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        .close:hover {
+            color: #00ffff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .form-row .form-group {
+                min-width: auto;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .scripts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>RAW PLATFORM</h1>
-        
-        <form id="rawForm">
-            <div class="form-group">
-                <label for="filename">Nome do Arquivo</label>
-                <input type="text" id="filename" name="filename" placeholder="exemplo.html">
+        <div class="header">
+            <h1>RAW PLATFORM</h1>
+            <p>Compartilhe e armazene seus códigos de forma segura</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('create')">Criar Script</button>
+            <button class="tab-btn" onclick="showTab('explore')">Explorar</button>
+            <button class="tab-btn" onclick="showTab('myScripts')">Meus Scripts</button>
+            <button class="tab-btn" onclick="showTab('stats')">Estatísticas</button>
+        </div>
+
+        <!-- Tab: Criar Script -->
+        <div id="create" class="tab-content active">
+            <div class="card">
+                <form id="createForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="usuario">Seu Nome</label>
+                            <input type="text" id="usuario" name="usuario" placeholder="Digite seu nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="filename">Nome do Arquivo</label>
+                            <input type="text" id="filename" name="filename" placeholder="exemplo.html">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <input type="text" id="description" name="description" placeholder="Descrição do script (opcional)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conteudo">Código</label>
+                        <textarea id="conteudo" name="conteudo" placeholder="Cole seu código aqui..." required></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn">Criar Script</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()">Limpar</button>
+                        <button type="button" class="btn btn-secondary" onclick="previewCode()">Preview</button>
+                    </div>
+                </form>
+
+                <div id="createStatus" class="status"></div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="content">Conteúdo do Arquivo</label>
-                <textarea id="content" name="content" placeholder="Digite seu código aqui..."></textarea>
+        <!-- Tab: Explorar -->
+        <div id="explore" class="tab-content">
+            <div class="card">
+                <h2 style="color: #00ffff; margin-bottom: 20px;">Scripts Públicos</h2>
+                <div id="exploreLoading" class="loading">
+                    <div class="spinner"></div>
+                    Carregando scripts...
+                </div>
+                <div id="exploreContent" style="display: none;">
+                    <div id="exploreScripts" class="scripts-grid"></div>
+                    <div id="explorePagination" class="pagination"></div>
+                </div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="description">Descrição (Opcional)</label>
-                <input type="text" id="description" name="description" placeholder="Descrição do arquivo">
+        <!-- Tab: Meus Scripts -->
+        <div id="myScripts" class="tab-content">
+            <div class="card">
+                <div class="form-row" style="margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label for="searchUser">Seu Nome (para buscar seus scripts)</label>
+                        <input type="text" id="searchUser" placeholder="Digite seu nome">
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: end;">
+                        <button class="btn" onclick="loadMyScripts()">Buscar Meus Scripts</button>
+                    </div>
+                </div>
+                
+                <div id="myScriptsLoading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    Carregando seus scripts...
+                </div>
+                <div id="myScriptsContent"></div>
             </div>
+        </div>
 
-            <div class="button-group">
-                <button type="submit">Salvar Raw</button>
-                <button type="button" class="secondary-btn" onclick="clearForm()">Limpar</button>
-                <button type="button" class="secondary-btn" onclick="previewCode()">Visualizar</button>
+        <!-- Tab: Estatísticas -->
+        <div id="stats" class="tab-content">
+            <div class="card">
+                <h2 style="color: #00ffff; margin-bottom: 20px;">Estatísticas da Plataforma</h2>
+                <div id="statsLoading" class="loading">
+                    <div class="spinner"></div>
+                    Carregando estatísticas...
+                </div>
+                <div id="statsContent" style="display: none;">
+                    <div class="stats-grid"></div>
+                </div>
             </div>
-        </form>
+        </div>
+    </div>
 
-        <div id="status" class="status"></div>
-
-        <div id="resultArea" class="result-area">
-            <h3 style="color: #00ffff; margin-bottom: 15px;">Resultado:</h3>
-            <div id="resultContent"></div>
+    <!-- Modal para visualização de código -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle" style="color: #00ffff; margin-bottom: 15px;"></h3>
+            <div id="modalMeta" style="color: #888; margin-bottom: 15px; font-size: 14px;"></div>
+            <pre id="modalCode" style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"></pre>
+            <div class="btn-group">
+                <button class="btn" onclick="copyToClipboard()">Copiar Código</button>
+                <button class="btn btn-secondary" onclick="openRawUrl()">Abrir RAW</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Fechar</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Função para limpar formulário
-        function clearForm() {
-            document.getElementById('rawForm').reset();
-            hideResult();
-            hideStatus();
-        }
-
-        // Função para preview do código
-        function previewCode() {
-            const content = document.getElementById('content').value;
-            const filename = document.getElementById('filename').value;
-            
-            if (!content.trim()) {
-                showStatus('Por favor, insira algum conteúdo para visualizar.', 'error');
-                return;
+        // Configuração da API
+        const API_BASE = '/api';
+        let currentUser = localStorage.getItem('rawPlatformUser') || '';
+        let currentScriptData = null;
+        let currentPage = 1;
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Restaurar nome do usuário
+            if (currentUser) {
+                document.getElementById('usuario').value = currentUser;
+                document.getElementById('searchUser').value = currentUser;
             }
-
-            const resultArea = document.getElementById('resultArea');
-            const resultContent = document.getElementById('resultContent');
             
-            resultContent.innerHTML = `
-                <p><strong>Arquivo:</strong> ${filename || 'Sem nome'}</p>
-                <p><strong>Tamanho:</strong> ${content.length} caracteres</p>
-                <hr style="border: 1px solid rgba(0, 255, 255, 0.3); margin: 15px 0;">
-                <pre style="white-space: pre-wrap; word-wrap: break-word;">${escapeHtml(content)}</pre>
-            `;
+            // Carregar dados iniciais
+            loadPublicScripts();
+            loadStats();
             
-            resultArea.classList.add('active');
-            showStatus('Preview gerado com sucesso!', 'success');
+            // Auto-resize textarea
+            document.getElementById('conteudo').addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.max(this.scrollHeight, 200) + 'px';
+            });
+        });
+
+        // Navegação por abas
+        function showTab(tabName) {
+            // Esconder todas as abas
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Mostrar aba selecionada
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Carregar dados específicos da aba
+            switch(tabName) {
+                case 'explore':
+                    loadPublicScripts();
+                    break;
+                case 'stats':
+                    loadStats();
+                    break;
+            }
         }
 
-        // Função para mostrar status
-        function showStatus(message, type) {
-            const status = document.getElementById('status');
-            status.textContent = message;
-            status.className = `status ${type}`;
-        }
-
-        // Função para esconder status
-        function hideStatus() {
-            const status = document.getElementById('status');
-            status.className = 'status';
-        }
-
-        // Função para esconder resultado
-        function hideResult() {
-            document.getElementById('resultArea').classList.remove('active');
-        }
-
-        // Função para escapar HTML
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, (m) => map[m]);
-        }
-
-        // Event listener para o formulário
-        document.getElementById('rawForm').addEventListener('submit', function(e) {
+        // Função para criar script
+        document.getElementById('createForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const filename = document.getElementById('filename').value;
-            const content = document.getElementById('content').value;
-            const description = document.getElementById('description').value;
+            const formData = {
+                usuario: document.getElementById('usuario').value.trim(),
+                filename: document.getElementById('filename').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                conteudo: document.getElementById('conteudo').value.trim()
+            };
 
-            if (!content.trim()) {
-                showStatus('Por favor, insira algum conteúdo.', 'error');
+            if (!formData.usuario || !formData.conteudo) {
+                showStatus('createStatus', 'Por favor, preencha os campos obrigatórios.', 'error');
                 return;
             }
 
-            // Simular salvamento (aqui você adicionaria a lógica real de salvamento)
-            setTimeout(() => {
-                showStatus(`Arquivo "${filename || 'Sem nome'}" salvo com sucesso!`, 'success');
+            // Salvar nome do usuário
+            currentUser = formData.usuario;
+            localStorage.setItem('rawPlatformUser', currentUser);
+
+            try {
+                showStatus('createStatus', 'Criando script...', 'info');
                 
-                // Mostrar informações do arquivo salvo
-                const resultContent = document.getElementById('resultContent');
-                resultContent.innerHTML = `
-                    <p><strong>✓ Arquivo salvo:</strong> ${filename || 'Sem nome'}</p>
-                    <p><strong>Tamanho:</strong> ${content.length} caracteres</p>
-                    <p><strong>Descrição:</strong> ${description || 'Nenhuma'}</p>
-                    <p><strong>Data:</strong> ${new Date().toLocaleString('pt-BR')}</p>
-                `;
-                document.getElementById('resultArea').classList.add('active');
-            }, 500);
+                const response = await fetch(`${API_BASE}/criar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showStatus('createStatus', `Script criado com sucesso! ID: ${result.id}`, 'success');
+                    
+                    // Adicionar links úteis
+                    const statusEl = document.getElementById('createStatus');
+                    statusEl.innerHTML += `
+                        <div style="margin-top: 10px;">
+                            <strong>Links:</strong><br>
+                            <a href="${result.url}" target="_blank">Ver RAW</a> | 
+                            <a href="${result.viewUrl}" onclick="viewScript('${result.id}'); return false;">Visualizar</a>
+                        </div>
+                    `;
+                    
+                    // Limpar formulário após 3 segundos
+                    setTimeout(() => {
+                        document.getElementById('createForm').reset();
+                        document.getElementById('usuario').value = currentUser;
+                        hideStatus('createStatus');
+                    }, 5000);
+                    
+                } else {
+                    showStatus('createStatus', result.message || 'Erro ao criar script', 'error');
+                    if (result.errors) {
+                        showStatus('createStatus', result.errors.join(', '), 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showStatus('createStatus', 'Erro de conexão com o servidor', 'error');
+            }
         });
 
-        // Auto-resize do textarea
-        document.getElementById('content').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.max(this.scrollHeight, 200) + 'px';
-        });
-    </script>
-</body>
-</html>
+        // Carregar scripts públicos
+        async function loadPublicScripts(page = 1) {
+            try {
+                document.getElementById('exploreLoading').style.display = 'block';
+                document.getElementById('exploreContent').style.display = 'none';
+                
+                const response = await fetch(`${API_BASE}/scripts?page=${page}&limit=12`);
+                const result = await response.json();
+
+                if (result.success) {
+                    displayScripts(result.scripts, 'exploreScripts');
+                    createPagination(result, 'explorePagination', loadPublicScripts);
+                    
+                    document.getElementById('exploreLoading').style.display = 'none';
+                    document.getElementById('exploreContent').style.display = 'block';
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                document.getElementById('exploreLoading').innerHTML = 
+                    `<p style="color: #ff6666;">Erro ao carregar scripts: ${error.message}</p>`;
+            }
+        }
+
+        // Carregar meus scripts
+        async function loadMyScripts() {
+            const username = document.getElementById('searchUser').value.trim();
+            if (!username) {
+                alert('Por favor, digite seu nome para buscar seus scripts.');
+                return;
+            }
+
+            try {
+                document.getElementById('myScriptsLoading').style.display = 'block';
+                document.getElementById('myScriptsContent').innerHTML = '';
+                
+                const response = await fetch(`${API_BASE}/scripts`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const userScripts = result.scripts.filter(script => 
+                        script.usuario.toLowerCase() === username.toLowerCase()
+                    );
+                    
+                    if (userScripts.length > 0) {
+                        displayScripts(userScripts, 'myScriptsContent', true);
+                    } else {
+                        document.getElementById('myScriptsContent').innerHTML = 
+                            `<p style="text-align: center; color: #888; padding: 40px;">Nenhum script encontrado para "${username}"</p>`;
+                    }
+                } else {
+                    throw new Error(result.message);
+                }
+                
+                document.getElementById('myScriptsLoading').style.display = 'none';
+                
+            } catch (error) {
+                document.getElementById('myScriptsLoading').style.display = 'none';
+                document.getElementById('myScriptsContent').innerHTML = 
+                    `<p style="color: #ff6666;">Erro ao carregar scripts: ${error.message}</p>`;
+            }
+        }
+
+        // Exibir scripts
+        function displayScripts(scripts, containerId, showActions = false) {
+            const container = document.getElementById(containerId);
+            
+            if (scripts.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #888;">Nenhum script encontrado.</p>';
+                return;
+            }
+
+            const scriptsHtml = scripts.map(script => {
+                const date = new Date(script.created).toLocaleDateString('pt-BR');
+                const actions = showActions ? `
+                    <button class="btn btn-secondary" onclick="editScript('${script.id}')">Editar</button>
+                    <button class="btn btn-danger" onclick="deleteScript('${script.id}')">Deletar</button>
+                ` : '';
+
+                return `
+                    <div class="script-card">
+                        <div class="script-title">${script.filename || script.id}</div>
+                        <div class="script-meta">
+                            Por ${script.usuario} • ${date} • ${script.views} views • ${script.size} chars
+                        </div>
+                        <div class="script-description">
+                            ${script.description || 'Sem descrição'}
+                        </div>
+                        <div class="script-actions">
+                            <button class="btn btn-secondary" onclick="viewScript('${script.id}')">Ver Código</button>
+                            <button class="btn btn-secondary" onclick="window.open('/raw/${script.id}', '_blank')">RAW</button>
+                            ${actions}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (containerId === 'myScriptsContent') {
+                container.innerHTML = `<div class="scripts-grid">${scriptsHtml}</div>`;
+            } else {
+                container.innerHTML = scriptsHtml;
+            }
+        }
+
+        // Criar paginação
+        function createPagination(result, containerId, loadFunction) {
+            const container = document.getElementById(containerId);
+            const totalPages = Math.ceil(result.total / result.limit);
+            const currentPage = result.page;
+
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let paginationHtml = '';
+            
+            // Botão anterior
+            if (currentPage > 1) {
+                paginationHtml += `<button class="page-btn" onclick="${loadFunction.name}(${currentPage - 1})">‹ Anterior</button>`;
+            }
+
+            // Números das páginas
+            for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+                paginationHtml += `
+                    <button class="page-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="${loadFunction.name}(${i})">${i}</button>
+                `;
+            }
+
+            // Botão próximo
+            if (currentPage < totalPages) {
+                paginationHtml += `<button class="page-btn" onclick="${loadFunction.name}(${currentPage + 1})">Próximo ›</button>`;
+            }
+
+            container.innerHTML = paginationHtml;
+        }
+
+        // Visualizar script
+        async function viewScript(id) {
+            try {
+                const response = await fetch(`/view/${id}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const script = result;
+                    const date = new Date(script.created).toLocaleDateString('pt-BR');
+                    
+                    document.getElementById('modalTitle').textContent = script.filename || `Script ${id}`;
+                    document.getElementById('modalMeta').innerHTML = `
+                        Por ${script.usuario} • Criado em ${date} • ${script.views} visualizações<br>
+                        ${script.description || 'Sem descrição'} • ${script.size} caracteres • ${script.lines} linhas
+                    `;
+                    
+                    // Carregar conteúdo RAW
+                    const rawResponse = await fetch(`/raw/${id}`);
+                    const rawContent = await rawResponse.text();
+                    
+                    document.getElementById('modalCode').textContent = rawContent;
+                    currentScriptData = { id, rawUrl: `/raw/${id}`, content: rawContent };
+                    
+                    document.getElementById('codeModal').style.display = 'block';
+                } else {
+                    alert('Erro ao carregar script: ' + result.message);
+                }
+            } catch (error) {
+                alert('Erro ao carregar script: ' + error.message);
+            }
+        }
+
+        // Editar script
+        
+    </body>
+ </html>
