@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Plataforma RAW</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Plataforma RAW</h1>
+  <form id="scriptForm">
+    <textarea name="conteudo" placeholder="Cole seu script aqui..."></textarea>
+    <input type="text" name="usuario" placeholder="Seu nome de usuário">
+    <button type="submit">Salvar Script</button>
+  </form>
+  <p id="link"></p>
+  <script>
+    document.getElementById("scriptForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const res = await fetch("/criar", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      document.getElementById("link").innerHTML = 
+        `Seu link RAW: <a href="${data.url}" target="_blank">${data.url}</a>`;
+    });
+  </script>
+</body>
+</html>
