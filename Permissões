@@ -1,0 +1,12 @@
+local Donos = {
+    ["ronia_oys"] = true,
+    ["murilo_12303"] = true,
+    ["ixi362"] = true,
+    ["adm_hub6"] = true,
+    ["cantanguandi2"] = true,
+    ["souoluis_perdiaconta"] = true,
+    ["oiiikk97"] = true,
+    ["fgzinzzz"] = true,
+    ["pedrorjgm11"] = true,
+    ["jxtacb"] = true
+}
