@@ -11,7 +11,7 @@ local PlayerMouse = Player:GetMouse()
 local redzlib = {
 	Themes = {
 		Darker = {
-			["Color Hub 1"] = 			ColorSequence.new({
+			["Color Hub 1"] = ColorSequence.new({
 				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 0)), -- início amarelo
 				ColorSequenceKeypoint.new(0.10, Color3.fromRGB(0, 0, 0)),   -- logo vira preto
 				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 0, 0))    -- final preto
